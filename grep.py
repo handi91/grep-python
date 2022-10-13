@@ -40,13 +40,31 @@ def mode_whole_word(pattern, location):
         for i in range(len(files)):
             sentences = scan_file(files[i])
             for count in range(len(sentences)):
-                if(re.search(rf"\b{pattern}\b", sentences[count])):
+                is_match = False
+                if(re.search(rf"\s{pattern}\s", sentences[count])):
+                    is_match = True
+                elif(re.search(rf"^{pattern}\s", sentences[count])):
+                    is_match = True
+                elif(re.search(rf"\s{pattern}$", sentences[count])):
+                    is_match = True
+                elif(sentences[count] == pattern):
+                    is_match = True
+                if is_match:
                     print_line(files[i], count + 1, sentences[count])
     else:
         sentences = scan_file(location)
         for count in range(len(sentences)):
-            if(re.search(rf"\b{pattern}\b", sentences[count])):
-                print_line(location, count + 1, sentences[count])
+            is_match = False
+            if(re.search(rf"\s{pattern}\s", sentences[count])):
+                is_match = True
+            elif(re.search(rf"^{pattern}\s", sentences[count])):
+                is_match = True
+            elif(re.search(rf"\s{pattern}$", sentences[count])):
+                is_match = True
+            elif(sentences[count] == pattern):
+                is_match = True
+            if is_match:
+                print_line(files[i], count + 1, sentences[count])
 
 # TODO: edit logic pattern match string
 def mode_insensitive(pattern, location):
