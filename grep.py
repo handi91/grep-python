@@ -41,6 +41,15 @@ def handle_without_option(direktori, pattern, is_file):
     file.close()
     return
   
+  if direktori[-1:] != "\\":
+    direktori = direktori + "\\"
+  
+  for dir in os.listdir(direktori):
+    new_dir = direktori+dir
+    if os.path.isfile(new_dir):
+      handle_without_option(new_dir, pattern, True)
+    elif os.path.isdir(new_dir):
+      handle_without_option(new_dir, pattern, False)
 
 def main():
   valid_args = get_valid_arguments()
