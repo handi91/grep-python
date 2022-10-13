@@ -1,3 +1,4 @@
+from genericpath import isdir
 import os
 import sys
 import re
@@ -20,15 +21,51 @@ def get_valid_arguments():
   # jumlah argumen 2
   return args
 
+def print_line(path, line, sentence):
+  print("{:40s} line {:<3d} {:40s}".format(path, line, sentence))
+
+def scan_file(file, pattern, direktori):
+  line_idx = 0
+  for line in file:
+    line_idx += 1
+    if re.search(pattern, line.strip()):
+      print_line(direktori, line_idx, line.strip())
+
+def handle_with_option(option, direktori, pattern, is_file):
+  pass
+
+def handle_without_option(direktori, pattern, is_file):
+  if is_file:
+    file = open(direktori, "r")
+    scan_file(file, pattern, direktori)
+    file.close()
+    return
+  
+
 def main():
   valid_args = get_valid_arguments()
 
   if valid_args is None: 
     print("Argumen program tidak benar.")
     return
-  
-  print(valid_args)
-  print("benar")
+
+  is_file = False
+  option = ""
+
+  direktori = valid_args[1] if len(valid_args) == 2 else valid_args[2]
+  if os.path.exists(direktori):
+    if os.path.isfile(direktori):
+      is_file = True
+  else:
+    print(f"Path {direktori} tidak ditemukan.")
+    return
+
+  if len(valid_args) == 3:
+    option = valid_args[0]
+    handle_with_option(option, direktori, valid_args[1], is_file)
+  else:
+    handle_without_option(direktori, valid_args[0], is_file)
+
 
 if __name__ == '__main__':
   main()
