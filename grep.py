@@ -17,24 +17,28 @@ def list_files(folder):
 
 def mode_default(pattern, location):
     """Mode tanpa argumen options"""
+    if '*' in pattern:
+        pattern = ".*".join(pattern.split('*'))
     files = list_files(location)
     if (len(files) > 0):
         for i in range(len(files)):
             sentences = scan_file(files[i])
             for count in range(len(sentences)):
                 # hanya mengecek konten di dalam kalimat
-                if(pattern in sentences[count]):
+                if(re.search(rf"{pattern}", sentences[count])):
                     print_line(files[i], count + 1, sentences[count])
     else:
         sentences = scan_file(location)
         for count in range(len(sentences)):
             # hanya mengecek konten di dalam kalimat
-            if(pattern in sentences[count]):
+            if(re.search(rf"{pattern}", sentences[count])):
                 print_line(location, count + 1, sentences[count])
 
 # TODO: edit logic pattern match string
 def mode_whole_word(pattern, location):
     """Mode argumen menggunakan -w"""
+    if '*' in pattern:
+        pattern = ".*".join(pattern.split('*'))
     files = list_files(location)
     if (len(files) > 0):
         for i in range(len(files)):
@@ -69,6 +73,8 @@ def mode_whole_word(pattern, location):
 # TODO: edit logic pattern match string
 def mode_insensitive(pattern, location):
     """Mode argumen menggunakan -i"""
+    if '*' in pattern:
+        pattern = ".*".join(pattern.split('*'))
     files = list_files(location)
     if (len(files) > 0):
         for i in range(len(files)):
